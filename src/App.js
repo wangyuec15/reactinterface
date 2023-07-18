@@ -2,13 +2,12 @@ import {BiCalendar} from "react-icons/bi"
 import { useState, useEffect, useCallback } from "react";
 import Search from "./components/Search"
 import AddAppointment from "./components/AddAppointment";
-import appointmentList from "./data.json";
 import AppointmentInfo from "./components/AppointmentInfo";
 function App() {
   let [appointmentList, setAppointmentList] = useState([]);
   const fetchData = useCallback(()=>{
     fetch('./data.json')
-    .then(response=>response.json )
+    .then(response=>response.json() )
     .then(data => setAppointmentList(data));
 
   },[]);
@@ -26,7 +25,9 @@ function App() {
     <ul className="divide-y divide-gray-200">
     {
       appointmentList.map(appointment => (
-       <AppointmentInfo key={appointment.id} appointment={appointment} />
+       <AppointmentInfo key={appointment.id} appointment={appointment} onDeleteAppointment={
+        appointmentId => setAppointmentList(appointmentList.filter(appointment => appointment.id !== appointmentId))
+       }/>
       ))
     }
     </ul>
