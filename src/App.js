@@ -14,6 +14,14 @@ function App() {
   useEffect(() => {
     fetchData()
   }, [fetchData]);
+
+  let [query, setQuery] = useState("");
+
+  const filteredAppointments = appointmentList.filter(item => {
+    return (item.petName.toLowerCase().includes(query.toLowerCase()) || 
+    item.ownerName.toLowerCase().includes(query.toLowerCase()) || 
+    item.aptNotes.toLowerCase().includes(query.toLowerCase()) )
+  })
   return (
     <div className="App container mx-auto mt-3 font-thin">
     <h1 className="text-5xl">
@@ -21,10 +29,10 @@ function App() {
       Your Appointments
     </h1>
     <AddAppointment />
-    <Search />
+    <Search query={query} onQueryChange={myQuery => setQuery(myQuery)}/>
     <ul className="divide-y divide-gray-200">
     {
-      appointmentList.map(appointment => (
+      filteredAppointments.map(appointment => (
        <AppointmentInfo key={appointment.id} appointment={appointment} onDeleteAppointment={
         appointmentId => setAppointmentList(appointmentList.filter(appointment => appointment.id !== appointmentId))
        }/>
